@@ -16,6 +16,6 @@ app.use('/api/locations', locationRoutes);
 const PORT = process.env.PORT || 3001;
 connectDB().then(() => {
   app.listen(PORT, () => {
-    console.log(`🚀 Backend corriendo en http://localhost:${PORT}`);
+    console.log(`Backend corriendo en http://localhost:${PORT}`);
   });
 });
