@@ -12,7 +12,7 @@ export const isAuthenticated = () => {
 };
   
 export const logout = () => {
-    localStorage.removeItem('token');
-    sessionStorage.removeItem('token');
+    localStorage.removeItem('authToken');
+    sessionStorage.removeItem('authToken');
   };
   
