@@ -8,10 +8,13 @@ const {
   deleteLocation
 } = require('../controllers/locationController');
 
+const authMiddleware = require('../middleware/authMiddleware');
+
 router.get('/', getLocations);
 router.get('/:id', getLocationById);
-router.post('/', createLocation);
-router.put('/:id', updateLocation);
-router.delete('/:id', deleteLocation);
+
+router.post('/', authMiddleware, createLocation);
+router.put('/:id', authMiddleware, updateLocation);
+router.delete('/:id', authMiddleware, deleteLocation);
 
 module.exports = router;

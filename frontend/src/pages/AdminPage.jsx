@@ -1,7 +1,23 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { getToken, logout } from '/auth'; 
+import { useNavigate } from 'react-router-dom';
 
 function AdminPage() {
+  
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!getToken()) {
+      navigate('/login');
+    }
+  }, []);
+
+  //logout 
+  const handleLogout = () => {      
+    logout();  
+    navigate('/');    
+  };
+
   const [locations, setLocations] = useState([]);
   const [form, setForm] = useState({
     name: '',
@@ -36,10 +52,16 @@ function AdminPage() {
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`http://localhost:3001/api/locations/${editingId}`, form);
+        await axios.put(`http://localhost:3001/api/locations/${editingId}`, form, { headers: {
+           Authorization: `Bearer ${getToken()}`
+         }
+        });
         setMessage('Ubicación actualizada correctamente.');
       } else {
-        await axios.post('http://localhost:3001/api/locations', form);
+        await axios.post('http://localhost:3001/api/locations', form, { headers: {
+           Authorization: `Bearer ${getToken()}`
+         }
+        });
         setMessage('Ubicación creada correctamente.');
       }
       setForm({ name: '', address: '', latitude: '', longitude: '' });
@@ -58,7 +80,11 @@ function AdminPage() {
   const handleDelete = async (id) => {
     if (confirm('¿Seguro que deseas eliminar esta ubicación?')) {
       try {
-        await axios.delete(`http://localhost:3001/api/locations/${id}`);
+        await axios.delete(`http://localhost:3001/api/locations/${id}`, {
+          headers: {
+            Authorization: `Bearer ${getToken()}`
+          }
+        });
         fetchLocations();
         setMessage('Ubicación eliminada.');
       } catch (err) {
@@ -70,8 +96,16 @@ function AdminPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-5xl bg-white p-6 rounded-2xl shadow-md">
+        
         <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Panel de Administración</h1>
-
+        <div className="flex justify-end">
+        <button
+          onClick={handleLogout}
+          className=" mb-4 px-4 py-2 bg-red-400 text-white rounded hover:bg-red-600"
+        >
+          Cerrar sesión
+        </button>
+        </div>
         {message && (
           <div className="mb-4 p-3 rounded text-white bg-green-600 text-sm">
             {message}

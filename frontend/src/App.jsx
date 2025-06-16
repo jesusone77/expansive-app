@@ -1,16 +1,26 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import  LocationsPage from './pages/LocationsPage';
+// src/App.jsx o donde configures tus rutas
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminPage from './pages/AdminPage';
-import './index.css';
+import LoginPage from './pages/LoginPage';
+import LocationsPage from './pages/LocationsPage';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path="/locations" element={<LocationsPage />} />
-         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<LocationsPage />} />
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              <AdminPage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 

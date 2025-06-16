@@ -14,12 +14,21 @@ const defaultCenter = {
 function GoogleMapComponent({ locations, focusedLocation }) {
   const [selected, setSelected] = useState(null);
   const [center, setCenter] = useState(defaultCenter);
+  const [clickPosition, setClickPosition] = useState(null);
+
   useEffect(() => {
     if (focusedLocation) {
-      setCenter({ lat: focusedLocation.lat, lng: focusedLocation.lng });
+      setCenter({ lat: focusedLocation.latitude, lng: focusedLocation.longitude });
       setSelected(focusedLocation);
     }
   }, [focusedLocation]);
+
+  const handleMapClick = (e) => {
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
+    setClickPosition({ lat, lng });
+    setSelected(null); // Ocultar el InfoWindow anterior
+  };
 
   return (
     <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
@@ -27,6 +36,7 @@ function GoogleMapComponent({ locations, focusedLocation }) {
         mapContainerStyle={containerStyle}
         center={center}
         zoom={14}
+        onClick={handleMapClick}
       >
         {locations.map((loc) => (
           <Marker
@@ -36,9 +46,13 @@ function GoogleMapComponent({ locations, focusedLocation }) {
           />
         ))}
 
+        {clickPosition && (
+          <Marker position={clickPosition} />
+        )}  
+
         {selected && (
           <InfoWindow
-            position={{ lat: selected.lat, lng: selected.lng }}
+            position={{ lat: selected.latitude, lng: selected.longitude }}
             onCloseClick={() => setSelected(null)}
           >
             <div>

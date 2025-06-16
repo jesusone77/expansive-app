@@ -1,11 +1,21 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import GoogleMapComponent from '../components/GoogleMapComponent';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../../auth'; 
+
+
 
 function LocationsPage() {
+  logout();  
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  
+  const toLogin = () => {
+    navigate('/login');
+  }
 
 useEffect(() => {
   axios.get('http://localhost:3001/api/locations/')
@@ -23,8 +33,12 @@ useEffect(() => {
         <div className="text-xl font-bold">Expansive</div>
         <div className="text-gray-700">{user ? user.name : ''}</div>
         <div className="flex flex-col items-end space-y-2">
-          <button className="px-4 py-1 bg-blue-500 text-white rounded">Login</button>
-          <button className="px-4 py-1 bg-green-500 text-white rounded">Registrarse</button>
+          <button 
+          onClick={toLogin}  
+          className="px-4 py-1 bg-blue-500 text-white rounded"
+          >
+            Login
+          </button>
         </div>
       </header>
 
@@ -38,7 +52,8 @@ useEffect(() => {
                 className="cursor-pointer p-2 bg-white shadow rounded hover:bg-blue-100"
                 onClick={() => setSelectedLocation(loc)}
               >
-                {loc.name}
+                {loc.name + " "}
+                {loc.description}
               </li>
             ))}
           </ul>
