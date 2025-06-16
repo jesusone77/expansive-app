@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 const containerStyle = {
   width: '100%',
-  height: '100%',
+  height: '100%'
 };
 
 const defaultCenter = {
@@ -14,7 +14,6 @@ const defaultCenter = {
 function GoogleMapComponent({ locations, focusedLocation }) {
   const [selected, setSelected] = useState(null);
   const [center, setCenter] = useState(defaultCenter);
-
   useEffect(() => {
     if (focusedLocation) {
       setCenter({ lat: focusedLocation.lat, lng: focusedLocation.lng });
@@ -32,7 +31,7 @@ function GoogleMapComponent({ locations, focusedLocation }) {
         {locations.map((loc) => (
           <Marker
             key={loc._id}
-            position={{ lat: loc.lat, lng: loc.lng }}
+            position={{ lat: loc.latitude, lng: loc.longitude }}
             onClick={() => setSelected(loc)}
           />
         ))}
