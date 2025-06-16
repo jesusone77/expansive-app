@@ -1,45 +1,57 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import GoogleMapComponent from '../components/GoogleMapComponent';
 
-// Fix default marker icon bug in Leaflet + React
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
-});
-
-const LocationsPage = () => {
+function LocationsPage() {
   const [locations, setLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    axios.get('http://localhost:3001/api/locations')
-      .then(res => setLocations(res.data))
-      .catch(err => console.error('Error cargando ubicaciones:', err));
-  }, []);
+useEffect(() => {
+  axios.get('http://localhost:3001/api/locations/')
+    .then(res => {
+      console.log("Datos recibidos:", res.data);
+      setLocations(res.data);
+    })
+    .catch(err => console.error(err));
+}, []);
 
   return (
-    <div style={{ height: '100vh' }}>
-      <MapContainer center={[19.4326, -99.1332]} zoom={12} style={{ height: '100%' }}>
-        <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {locations.map(loc => (
-          <Marker key={loc._id} position={[loc.latitude, loc.longitude]}>
-            <Popup>
-              <strong>{loc.name}</strong><br />
-              {loc.description}<br />
-              <small>{loc.address}</small>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
+    <div className="h-screen flex flex-col">
+     
+      <header className="bg-white shadow-md flex items-center justify-between px-6 py-4 h-[16%]">
+        <div className="text-xl font-bold">Expansive</div>
+        <div className="text-gray-700">{user ? user.name : ''}</div>
+        <div className="flex flex-col items-end space-y-2">
+          <button className="px-4 py-1 bg-blue-500 text-white rounded">Login</button>
+          <button className="px-4 py-1 bg-green-500 text-white rounded">Registrarse</button>
+        </div>
+      </header>
+
+      <div className="flex flex-1 overflow-hidden">
+        <aside className="w-1/5 bg-gray-100 p-4 overflow-y-auto">
+          <h2 className="text-lg font-semibold mb-2">Ubicaciones</h2>
+          <ul className="space-y-2">
+            {locations.map((loc) => (
+              <li
+                key={loc._id}
+                className="cursor-pointer p-2 bg-white shadow rounded hover:bg-blue-100"
+                onClick={() => setSelectedLocation(loc)}
+              >
+                {loc.name}
+              </li>
+            ))}
+          </ul>
+        </aside>
+        <main className="flex-1">
+          <GoogleMapComponent
+            locations={locations}
+            focusedLocation={selectedLocation}
+          />
+        </main>
+      </div>
     </div>
   );
-};
+}
 
 export default LocationsPage;
