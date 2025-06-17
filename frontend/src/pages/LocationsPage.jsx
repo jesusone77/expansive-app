@@ -7,7 +7,7 @@ import { logout } from '../../auth';
 
 
 function LocationsPage() {
-  logout();  
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [user, setUser] = useState(null);
@@ -17,14 +17,14 @@ function LocationsPage() {
     navigate('/login');
   }
 
-useEffect(() => {
-  axios.get('http://localhost:3001/api/locations/')
+  useEffect(() => {
+  axios.get(VITE_API_URL + '/api/locations/')
     .then(res => {
       console.log("Datos recibidos:", res.data);
       setLocations(res.data);
     })
     .catch(err => console.error(err));
-}, []);
+  }, []);
 
   return (
     <div className="h-screen flex flex-col">

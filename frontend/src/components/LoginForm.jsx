@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { setToken } from "/auth.js";
 
 function LoginForm() {
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
+
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3001/api/login", form);
+      const res = await axios.post(VITE_API_URL + "/api/login", form);
       setToken(res.data.token);
       navigate("/admin");
     } catch (err) {

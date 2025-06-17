@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 function AdminPage() {
   
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!getToken()) {
@@ -15,7 +17,7 @@ function AdminPage() {
   //logout 
   const handleLogout = () => {      
     logout();  
-    navigate('/');    
+    location.href = '/'
   };
 
   const [locations, setLocations] = useState([]);
@@ -32,7 +34,7 @@ function AdminPage() {
   const fetchLocations = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:3001/api/locations');
+      const res = await axios.get(VITE_API_URL + '/api/locations');
       setLocations(res.data);
     } catch (err) {
       console.error('Error al obtener ubicaciones');
@@ -52,13 +54,13 @@ function AdminPage() {
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`http://localhost:3001/api/locations/${editingId}`, form, { headers: {
+        await axios.put(VITE_API_URL + `/api/locations/${editingId}`, form, { headers: {
            Authorization: `Bearer ${getToken()}`
          }
         });
         setMessage('Ubicación actualizada correctamente.');
       } else {
-        await axios.post('http://localhost:3001/api/locations', form, { headers: {
+        await axios.post(VITE_API_URL + '/api/locations', form, { headers: {
            Authorization: `Bearer ${getToken()}`
          }
         });
@@ -80,7 +82,7 @@ function AdminPage() {
   const handleDelete = async (id) => {
     if (confirm('¿Seguro que deseas eliminar esta ubicación?')) {
       try {
-        await axios.delete(`http://localhost:3001/api/locations/${id}`, {
+        await axios.delete(VITE_API_URL + `/api/locations/${id}`, {
           headers: {
             Authorization: `Bearer ${getToken()}`
           }
