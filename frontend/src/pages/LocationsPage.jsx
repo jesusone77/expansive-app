@@ -27,7 +27,7 @@ function LocationsPage() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100">
      
       <header className="bg-white shadow-md flex items-center justify-between px-6 py-4 h-[16%]">
         <div className="text-xl font-bold">Expansive</div>
@@ -42,7 +42,7 @@ function LocationsPage() {
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100">
         <aside className="w-1/5 bg-gray-100 p-4 overflow-y-auto">
           <h2 className="text-lg font-semibold mb-2">Ubicaciones</h2>
           <ul className="space-y-2">

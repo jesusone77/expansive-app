@@ -28,9 +28,9 @@ function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white p-6 rounded shadow-md w-80 space-y-4"
+      className="bg-white p-6 rounded shadow-md w-80 space-y-4 bg-white"
     >
-      <h2 className="text-xl font-semibold text-center">Iniciar sesión</h2>
+      <h2 className="text-xl font-semibold text-center p-2 bg-gray-100 text-black dark:bg-gray-800 dark:text-white border rounded">Iniciar sesión</h2>
       {error && <p className="text-red-500 text-sm text-center">{error}</p>}
       <input
         name="username"

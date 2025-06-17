@@ -96,7 +96,7 @@ function AdminPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 p-2 bg-gray-100 text-black dark:bg-gray-800 dark:text-white border rounded">
       <div className="w-full max-w-5xl bg-white p-6 rounded-2xl shadow-md">
         
         <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Panel de Administración</h1>
